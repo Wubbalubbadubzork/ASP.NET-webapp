@@ -201,9 +201,25 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711071302446_InitialMigrations.cs" />
+    <Compile Include="Migrations\201711071302446_InitialMigrations.Designer.cs">
+      <DependentUpon>201711071302446_InitialMigrations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711071303357_AddServersScenesOptions.cs" />
+    <Compile Include="Migrations\201711071303357_AddServersScenesOptions.Designer.cs">
+      <DependentUpon>201711071303357_AddServersScenesOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711071319254_AddForeignKeysToOptionsServers.cs" />
+    <Compile Include="Migrations\201711071319254_AddForeignKeysToOptionsServers.Designer.cs">
+      <DependentUpon>201711071319254_AddForeignKeysToOptionsServers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Options.cs" />
+    <Compile Include="Models\Scene.cs" />
+    <Compile Include="Models\Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -236,7 +252,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -271,7 +289,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
@@ -284,6 +301,17 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201711071302446_InitialMigrations.resx">
+      <DependentUpon>201711071302446_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711071303357_AddServersScenesOptions.resx">
+      <DependentUpon>201711071303357_AddServersScenesOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711071319254_AddForeignKeysToOptionsServers.resx">
+      <DependentUpon>201711071319254_AddForeignKeysToOptionsServers.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
