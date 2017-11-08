@@ -213,8 +213,29 @@
     <Compile Include="Migrations\201711071319254_AddForeignKeysToOptionsServers.Designer.cs">
       <DependentUpon>201711071319254_AddForeignKeysToOptionsServers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711080100489_FixedColumnNamesAddedGameTable.cs" />
+    <Compile Include="Migrations\201711080100489_FixedColumnNamesAddedGameTable.Designer.cs">
+      <DependentUpon>201711080100489_FixedColumnNamesAddedGameTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711080102156_AddedGameTable.cs" />
+    <Compile Include="Migrations\201711080102156_AddedGameTable.Designer.cs">
+      <DependentUpon>201711080102156_AddedGameTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711080104116_FirstStepFixingConventions.cs" />
+    <Compile Include="Migrations\201711080104116_FirstStepFixingConventions.Designer.cs">
+      <DependentUpon>201711080104116_FirstStepFixingConventions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711080105487_SecondStepFixingConventions.cs" />
+    <Compile Include="Migrations\201711080105487_SecondStepFixingConventions.Designer.cs">
+      <DependentUpon>201711080105487_SecondStepFixingConventions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711080107523_AddedForeignKeyGameServer.cs" />
+    <Compile Include="Migrations\201711080107523_AddedForeignKeyGameServer.Designer.cs">
+      <DependentUpon>201711080107523_AddedForeignKeyGameServer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Game.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Options.cs" />
@@ -311,6 +332,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711071319254_AddForeignKeysToOptionsServers.resx">
       <DependentUpon>201711071319254_AddForeignKeysToOptionsServers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711080100489_FixedColumnNamesAddedGameTable.resx">
+      <DependentUpon>201711080100489_FixedColumnNamesAddedGameTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711080102156_AddedGameTable.resx">
+      <DependentUpon>201711080102156_AddedGameTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711080104116_FirstStepFixingConventions.resx">
+      <DependentUpon>201711080104116_FirstStepFixingConventions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711080105487_SecondStepFixingConventions.resx">
+      <DependentUpon>201711080105487_SecondStepFixingConventions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711080107523_AddedForeignKeyGameServer.resx">
+      <DependentUpon>201711080107523_AddedForeignKeyGameServer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -9,9 +9,9 @@ namespace Wubbalubbadubzork.Models
     public class Scene
     {
         [Required]
-        public int id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Display(Name = "Descripcion")]
-        public string description { get; set; }
+        public string Description { get; set; }
     }
 }

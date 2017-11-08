@@ -10,13 +10,13 @@ namespace Wubbalubbadubzork.Models
     public class Server
     {
         [Required]
-        public int id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Display(Name = "Nombre")]
-        public string name { get; set; }
+        public string Name { get; set; }
         [Required]
         [ForeignKey("Scene")]
-        public int scene_id { get; set; }
+        public int Scene_id { get; set; }
         public virtual Scene Scene { get; set; }
     }
 }

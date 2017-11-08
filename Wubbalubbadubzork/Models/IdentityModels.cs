@@ -38,5 +38,6 @@ namespace Wubbalubbadubzork.Models
         public DbSet<Scene> Scenes { get; set; }
         public DbSet<Server> Servers { get; set; }
         public DbSet<Options> Options { get; set; }
+        public DbSet<Game> Games { get; set; }
     }
 }

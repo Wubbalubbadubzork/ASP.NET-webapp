@@ -190,3 +190,8 @@ D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wub
 D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.csproj.GenerateResource.Cache
 D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.AddServersScenesOptions.resources
 D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.AddForeignKeysToOptionsServers.resources
+D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.FixedColumnNamesAddedGameTable.resources
+D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.AddedGameTable.resources
+D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.FirstStepFixingConventions.resources
+D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.SecondStepFixingConventions.resources
+D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.AddedForeignKeyGameServer.resources
