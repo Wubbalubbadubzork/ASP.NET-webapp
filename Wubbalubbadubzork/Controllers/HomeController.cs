@@ -23,31 +23,5 @@ namespace Wubbalubbadubzork.Controllers
             }
             return View();
         }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-            if (Request.IsAuthenticated)
-            {
-                var userId = User.Identity.GetUserId();
-                var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                var user = manager.FindById(userId);
-                ViewBag.Name = user.Name;
-            }
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-            if (Request.IsAuthenticated)
-            {
-                var userId = User.Identity.GetUserId();
-                var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                var user = manager.FindById(userId);
-                ViewBag.Name = user.Name;
-            }
-            return View();
-        }
     }
 }
