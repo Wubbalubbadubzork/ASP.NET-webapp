@@ -9,6 +9,8 @@ namespace Wubbalubbadubzork.Models
 {
     public class Options
     {
+        ApplicationDbContext db = new ApplicationDbContext();
+
         [Required]
         public int Id { get; set; }
         [Required]
@@ -24,6 +26,6 @@ namespace Wubbalubbadubzork.Models
         [ForeignKey("Scene")]
         public int Scene_id { get; set; }
         public virtual Scene Scene { get; set; }
-       
+
     }
 }
