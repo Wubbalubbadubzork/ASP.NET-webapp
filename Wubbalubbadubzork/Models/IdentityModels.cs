@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Wubbalubbadubzork.Models
 {
@@ -21,7 +22,15 @@ namespace Wubbalubbadubzork.Models
         [Display(Name = "Nombre")]
         public string Name { get; set; }
 
+        [Display(Name = "Puntaje")]
+        public int Score { get; set; }
 
+        [ForeignKey("Game")]
+        public int? Game_Id { get; set; }
+        public virtual Game Game { get; set; }
+        [ForeignKey("Character")]
+        public int? Character_Id { get; set; }
+        public virtual Character Character { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -39,5 +48,7 @@ namespace Wubbalubbadubzork.Models
         public DbSet<Server> Servers { get; set; }
         public DbSet<Options> Options { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Character> Characters { get; set; }
+        public DbSet<Skill> Skills { get; set; }
     }
 }

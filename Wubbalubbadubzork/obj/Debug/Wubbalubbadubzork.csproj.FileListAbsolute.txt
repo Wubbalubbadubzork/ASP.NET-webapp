@@ -195,3 +195,5 @@ D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wub
 D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.FirstStepFixingConventions.resources
 D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.SecondStepFixingConventions.resources
 D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.AddedForeignKeyGameServer.resources
+D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.AddedCharacterSkills.resources
+D:\Documentos\ISC\5TO\Análisis y mod de software\Proyecto\Wubbalubbadubzork\Wubbalubbadubzork\obj\Debug\Wubbalubbadubzork.Migrations.AddedRelations.resources
