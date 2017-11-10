@@ -10,7 +10,7 @@ namespace Wubbalubbadubzork.Models
     public class Server
     {
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         [Display(Name = "Nombre")]
         public string Name { get; set; }

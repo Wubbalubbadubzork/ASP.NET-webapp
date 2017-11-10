@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System;
 
 namespace Wubbalubbadubzork.Models
 {
@@ -26,7 +27,7 @@ namespace Wubbalubbadubzork.Models
         public int Score { get; set; }
 
         [ForeignKey("Game")]
-        public int? Game_Id { get; set; }
+        public Guid? Game_Id { get; set; }
         public virtual Game Game { get; set; }
         [ForeignKey("Character")]
         public int? Character_Id { get; set; }

@@ -10,17 +10,13 @@ namespace Wubbalubbadubzork.Models
     public class Game
     {
         [Required]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         [Display(Name = "Nombre")]
         public string Name { get; set; } 
         [Required]
-        [Display(Name = "Codigo")]
-        [Range(1000, 9999, ErrorMessage = "Code must be of 4 digits.")]
-        public int Code { get; set; }
-        [Required]
         [ForeignKey("Server")]
-        public int Server_Id { get; set; }
+        public Guid Server_Id { get; set; }
         public virtual Server Server { get; set; }
     }
 }
