@@ -341,6 +341,11 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Game\Index.cshtml" />
+    <Content Include="Views\Game\Details.cshtml" />
+    <Content Include="Views\Game\Queue.cshtml" />
+    <Content Include="Views\Game\_JoinGameDialog.cshtml" />
+    <Content Include="Views\Game\CreateCustom.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -383,7 +388,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Game\" />
     <Folder Include="Views\Server\" />
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h2><a href="~/Game/Queue" class="btn btn-primary">Juega ahora!</a></h2>
+    </div>
+    <div class="col-md-12 text-center">
+        @Html.ActionLink("Crear Juego", "CreateGame", "Game", null, new { @class = "btn btn-primary"})
+        <h2><a id="joinGame" class="btn btn-primary">Unirse a partida</a></h2>
+    </div>
+</div>
+
+@section Dialogs{
+    
+    @Html.Partial("_JoinGameDialog")
+
+}
+
+@section Scripts{
+    
+    <script>
+        $(document).ready(function () {
+        console.log("Dialog javascript works!!");
+        var joinGameDialog = document.querySelector("#joinGameDialog");
+
+        if (!joinGameDialog.showModal) {
+            dialogPolyfill.registerDialog(piecesDialog);
+        }
+
+        setTimeout(function () {
+            $("#insert_pieces").click(function () {
+                insertionDialog.showModal();
+                $("#submit-insertion").unbind("click");
+                $("#insert-piece").val("");
+                $("#submit-insertion").click(function () {
+                    $.post(siteRoot + '/Production/AddPieces', {
+                        machine_name: $("#machine_name").html().trim(),
+                        order_id: $("#adminViewOrder").html().trim(),
+                        to_add_pieces: $("#insert-piece").val()
+                    })
+
+                        .done(function (response) {
+                            console.log('%c' + response, 'background: #222; color: #bada55');
+                            closeDialog();
+                        });
+                });
+            });
+        });
+
+        var closeDialog = function () {
+            joinGameDialog.close();
+        }
+
+        $("#cancel").click(function () {
+            closeDialog();
+        });
+    });
+
+    </script>
+    
+}

@@ -59,6 +59,12 @@ namespace Wubbalubbadubzork.Controllers
             return View();
         }
 
+        //GET
+        public ActionResult JoinGame()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult JoinGame(Guid game_id)
         {
@@ -72,44 +78,61 @@ namespace Wubbalubbadubzork.Controllers
                     user.Game_Id = game_id;
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("CreateCustom", new { game } ); //Modify
+                    return RedirectToAction("CreateCustom", new { game } );
                 }
             }
             return View();
         }
 
         // Get Game/CreateCustom
-        public ActionResult CreateCustom(Game game)
+        public ActionResult CreateCustom(Guid? Id)
         {
             var userId = User.Identity.GetUserId();
             var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var user = manager.FindById(userId);
             ViewBag.Name = user.Name;
 
-            return View(game);
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var g = db.Games.Find(Id);
+
+            if (g == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(g);
         }
 
-        [HttpPost]
-        public ActionResult CreateCustom()
+        public ActionResult CreateGame()
         {
             Game g = Create();
-           return  RedirectToAction("CreateCustom", new { g });
+
+            return RedirectToAction("CreateCustom", new { g.Id });
         }
 
         [HttpPost]
         public ActionResult StartGame (Game g)
         {
-            return RedirectToAction("Details", new { g.Id, g.Name } );
+            var nUsers = db.Users.Where(u => u.Game_Id == g.Id).ToList().Count();
+            if (nUsers == 4)
+            {
+                return RedirectToAction("Details", new { g.Id, g.Name });
+            }
+            return Content("Cannot start custom game without 4 players.");
         }
 
         public Game Create()
         {
             Game g = new Game();
-            g.Id = new Guid();
+            g.Id = Guid.NewGuid();
             g.Name = "Game: " + g.Id;
 
             Server s = new Server();
-            s.Id = new Guid();
+            s.Id = Guid.NewGuid();
             s.Name = "Server: " + s.Id;
             s.Scene_id = 1;
             s.Scene = db.Scenes.Where(u => u.Id == 1).FirstOrDefault();
