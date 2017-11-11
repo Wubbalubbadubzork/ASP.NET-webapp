@@ -31,21 +31,24 @@
         }
 
         setTimeout(function () {
-            $("#insert_pieces").click(function () {
-                insertionDialog.showModal();
-                $("#submit-insertion").unbind("click");
-                $("#insert-piece").val("");
-                $("#submit-insertion").click(function () {
-                    $.post(siteRoot + '/Production/AddPieces', {
-                        machine_name: $("#machine_name").html().trim(),
-                        order_id: $("#adminViewOrder").html().trim(),
-                        to_add_pieces: $("#insert-piece").val()
-                    })
-
-                        .done(function (response) {
-                            console.log('%c' + response, 'background: #222; color: #bada55');
+            $("#joinGame").click(function () {
+                joinGameDialog.showModal();
+                $("#join").unbind("click");
+                $("#gameId").val("");
+                $("#join").click(function () {
+                    $.post('/Game/JoinGame', {
+                        game_id: $("#gameId").val()
+                    }).done(function (response) {
+                        console.log('%c' + response, 'background: #222; color: #bada55');
+                        if (response == "Successful") {
                             closeDialog();
-                        });
+                            window.location= "/Game/CreateCustom/" + $("#gameId").val();
+                        }
+                        else {
+                            alert(response);
+                            closeDialog();
+                        }
+                    });
                 });
             });
         });

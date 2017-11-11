@@ -76,12 +76,13 @@ namespace Wubbalubbadubzork.Controllers
                 {
                     var user = db.Users.Find(User.Identity.GetUserId());
                     user.Game_Id = game_id;
+                    user.Game = game;
                     db.Entry(user).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("CreateCustom", new { game } );
+                    return Content("Successful");
                 }
             }
-            return View();
+            return Content("Already 4 players in game!");
         }
 
         // Get Game/CreateCustom
@@ -91,6 +92,8 @@ namespace Wubbalubbadubzork.Controllers
             var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var user = manager.FindById(userId);
             ViewBag.Name = user.Name;
+
+            ApplicationUser u = db.Users.Find(userId);
 
             if (Id == null)
             {
@@ -103,6 +106,11 @@ namespace Wubbalubbadubzork.Controllers
             {
                 return HttpNotFound();
             }
+
+            u.Game_Id = Id;
+            u.Game = g;
+            db.Entry(u).State = EntityState.Modified;
+            db.SaveChanges();
 
             return View(g);
         }
