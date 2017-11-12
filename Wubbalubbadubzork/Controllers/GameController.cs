@@ -28,7 +28,7 @@ namespace Wubbalubbadubzork.Controllers
         }
 
         //GET: Game/Details
-        public ActionResult Details(Guid? id, string name)
+        public ActionResult Details(Guid? id)
         {
             var userId = User.Identity.GetUserId();
             var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -39,10 +39,18 @@ namespace Wubbalubbadubzork.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            var u = db.Users.Find(userId);
+            
             var game = db.Games.Find(id);
             if (game == null)
             {
                 return HttpNotFound();
+            }
+            if(u.Game_Id == null)
+            {
+                u.Game_Id = id;
+                u.Game = game;
+                db.Entry(u).State = EntityState.Modified;
             }
 
             return View(game);
@@ -117,42 +125,21 @@ namespace Wubbalubbadubzork.Controllers
 
         public ActionResult CreateGame()
         {
-            Game g = Create();
+            Game g = HelperMethods.Create(Guid.NewGuid());
 
             return RedirectToAction("CreateCustom", new { g.Id });
         }
 
         [HttpPost]
-        public ActionResult StartGame (Game g)
+        public ActionResult StartGame (Guid Id)
         {
+            var g = db.Games.Find(Id);
             var nUsers = db.Users.Where(u => u.Game_Id == g.Id).ToList().Count();
             if (nUsers == 4)
             {
-                return RedirectToAction("Details", new { g.Id, g.Name });
+                return Content("Successful");
             }
             return Content("Cannot start custom game without 4 players.");
-        }
-
-        public Game Create()
-        {
-            Game g = new Game();
-            g.Id = Guid.NewGuid();
-            g.Name = "Game: " + g.Id;
-
-            Server s = new Server();
-            s.Id = Guid.NewGuid();
-            s.Name = "Server: " + s.Id;
-            s.Scene_id = 1;
-            s.Scene = db.Scenes.Where(u => u.Id == 1).FirstOrDefault();
-
-            g.Server_Id = s.Id;
-            g.Server = s;
-
-            db.Servers.Add(s);
-            db.Games.Add(g);
-            db.SaveChanges();
-
-            return g;
         }
     }
 }

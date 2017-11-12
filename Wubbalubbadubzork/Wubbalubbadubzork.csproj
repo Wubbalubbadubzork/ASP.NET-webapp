@@ -207,6 +207,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HelperMethods.cs" />
+    <Compile Include="Hubs\QueueHub.cs" />
     <Compile Include="Migrations\201711071302446_InitialMigrations.cs" />
     <Compile Include="Migrations\201711071302446_InitialMigrations.Designer.cs">
       <DependentUpon>201711071302446_InitialMigrations.cs</DependentUpon>
@@ -273,6 +275,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Javascripts\QueueHub.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

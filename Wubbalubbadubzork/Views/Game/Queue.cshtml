@@ -1,7 +1,12 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Queue";
 }
 
 <h2>Queue</h2>
+
+@section Scripts{
+    @Scripts.Render("~/Scripts/jquery.signalR-2.2.2.min.js")
+    @Scripts.Render("~/signalr/hubs")
+    @Scripts.Render("~/Content/Javascripts/QueueHub.js")
+}
 
