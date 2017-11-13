@@ -18,8 +18,8 @@ namespace Wubbalubbadubzork
             Server s = new Server();
             s.Id = Guid.NewGuid();
             s.Name = "Server: " + s.Id;
-            s.Scene_id = 1;
-            s.Scene = db.Scenes.Where(u => u.Id == 1).FirstOrDefault();
+            s.Scene_id = db.Scenes.FirstOrDefault().Id;
+            s.Scene = db.Scenes.FirstOrDefault();
 
             g.Server_Id = s.Id;
             g.Server = s;

@@ -2,7 +2,55 @@
 @{
     ViewBag.Title = "CreateCustom";
 }
+<span id="count" hidden>0</span>
+<div class="container text-center center-screen">
+    <h1><small id="gameId">@Model.Id</small></h1>
+    <br><br><br><br><br>
+    <h1>Pass this code to your friends!</h1>
+    <br><br><br><br><br>
+    <div class="row">
+        <div class="col-md-4">
+            <h3 id="waiting_1">Waiting...</h3>
+        </div>
+        <div class="col-md-4">
+            <h3 id="waiting_2">Waiting...</h3>
+        </div>
+        <div class="col-md-4">
+            <h3 id="waiting_3">Waiting...</h3>
+        </div>
+    </div>
+    <br><br><br><br><br>
+    <div class="row">
+        <!-- <div class="btn-group btn-group-md"> -->
+        <button id="cancel" type="button" class="btn-primary btn-lg">
+            Cancel
+        </button>
+        <button id="start" type="button" class="btn-success btn-lg">
+            Start
+        </button>
+        <!-- </div> -->
+    </div>
+</div>
 
-<h2>@Model.Id</h2>
-<p>Copy and paste this Id in your friends Join Game dialog.</p>
-
+@section Scripts{
+    @Scripts.Render("~/Scripts/jquery.signalR-2.2.2.min.js")
+    @Scripts.Render("~/signalr/hubs")
+    @Scripts.Render("~/Content/Javascripts/CreateHub.js")
+    <script>
+        $(document).ready(function () {
+            $("#start").click(function () {
+                $.post('/Game/StartGame', {
+                    Id: $("#gameId").html().trim()
+                }).done(function (response) {
+                    console.log('%c' + response, 'background: #222; color: #bada55');
+                    if (response == "Successful") {
+                        window.location = "/Game/Details/" + $("#gameId").html().trim();
+                    }
+                    else {
+                        alert(response);
+                    }
+                });
+            });
+        });
+    </script>
+}

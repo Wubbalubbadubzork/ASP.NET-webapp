@@ -22,8 +22,26 @@ namespace Wubbalubbadubzork.Controllers
         {
             var userId = User.Identity.GetUserId();
             var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var user = manager.FindById(userId);
-            ViewBag.Name = user.Name;
+            var u = manager.FindById(userId);
+            ViewBag.Name = u.Name;
+
+            var user = db.Users.Find(User.Identity.GetUserId());
+            if (user.Game_Id != null)
+            {
+                var game = db.Games.Find(user.Game_Id);
+                user.Game_Id = null;
+                user.Game = null;
+                var nUsers = db.Users.Where(g => g.Game_Id == game.Id).ToList().Count();
+                if(nUsers == 0)
+                {
+                    var server = db.Servers.Find(game.Server_Id);
+                    db.Servers.Remove(server);
+                    db.Games.Remove(game);
+                }
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
             return View();
         }
 
@@ -51,6 +69,7 @@ namespace Wubbalubbadubzork.Controllers
                 u.Game_Id = id;
                 u.Game = game;
                 db.Entry(u).State = EntityState.Modified;
+                db.SaveChanges();
             }
 
             return View(game);

@@ -3,13 +3,17 @@
     ViewBag.Title = "Index";
 }
 
-<div class="row">
-    <div class="col-md-12 text-center">
-        <h2><a href="~/Game/Queue" class="btn btn-primary">Juega ahora!</a></h2>
-    </div>
-    <div class="col-md-12 text-center">
-        @Html.ActionLink("Crear Juego", "CreateGame", "Game", null, new { @class = "btn btn-primary"})
-        <h2><a id="joinGame" class="btn btn-primary">Unirse a partida</a></h2>
+<div class="container text-center">
+    <h4><a href="~/Game/Queue" class="btn-success btn-lg">Juega ahora!</a></h4>
+    <img width="50%" class="img-responsive center-block img-rounded" src="~/Content/pictures/logo.jpg" alt="wubba lubba dub zork">
+    <br>
+    <div class="row text-center">
+        <div class="col-md-2 col-md-offset-4">
+            @Html.ActionLink("Crear", "CreateGame", "Game", null, new { @class = "btn-primary btn-lg" })
+        </div>
+        <div class="col-md-2">
+            <a id="joinGame" class="btn-success btn-lg">Unirse</a>
+        </div>
     </div>
 </div>
 

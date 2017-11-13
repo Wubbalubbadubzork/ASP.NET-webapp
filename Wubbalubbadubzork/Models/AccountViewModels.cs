@@ -58,7 +58,7 @@ namespace Wubbalubbadubzork.Models
         [Display(Name = "Contraseña")]
         public string Password { get; set; }
 
-        [Display(Name = "¿Recordar cuenta?")]
+        [Display(Name = "Recuérdame")]
         public bool RememberMe { get; set; }
     }
 

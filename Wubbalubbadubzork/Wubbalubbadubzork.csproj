@@ -208,6 +208,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HelperMethods.cs" />
+    <Compile Include="Hubs\CreateHub.cs" />
+    <Compile Include="Hubs\GameHub.cs" />
     <Compile Include="Hubs\QueueHub.cs" />
     <Compile Include="Migrations\201711071302446_InitialMigrations.cs" />
     <Compile Include="Migrations\201711071302446_InitialMigrations.Designer.cs">
@@ -275,7 +277,15 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\CSS\center-screen.css" />
+    <Content Include="Content\CSS\dick.css" />
+    <Content Include="Content\CSS\inf-loading.css" />
+    <Content Include="Content\CSS\main.css" />
+    <Content Include="Content\Javascripts\CreateHub.js" />
+    <Content Include="Content\Javascripts\Dice.js" />
+    <Content Include="Content\Javascripts\GameHub.js" />
     <Content Include="Content\Javascripts\QueueHub.js" />
+    <Content Include="Content\pictures\logo.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -349,6 +359,7 @@
     <Content Include="Views\Game\Queue.cshtml" />
     <Content Include="Views\Game\_JoinGameDialog.cshtml" />
     <Content Include="Views\Game\CreateCustom.cshtml" />
+    <Content Include="Views\Game\_Dice.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

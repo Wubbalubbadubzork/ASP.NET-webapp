@@ -1,14 +1,13 @@
 ﻿@using Wubbalubbadubzork.Models
 @model Game
 <dialog id="joinGameDialog">
-    <h4 class="modal-dialog">Insertar piezas</h4>
+    <h4 class="modal-dialog">Unirse a partida</h4>
     <div class="col-md-12 text-center">
-        @Html.LabelFor(m => m.Id, new { @class = "col-md-2 control-label" })
-        @Html.TextBoxFor(m => m.Id, new { @id = "gameId", @class = "col-md-2 control-label" })
+        @Html.TextBoxFor(m => m.Id, new { @placeholder = "ID", @id = "gameId", @class = "col-md-2 control-label" })
     </div>
     <div class="col-md-12 text-right">
-        <a id="cancel" tabindex="1" class="btn btn-primary">Cancelar</a>
-        <a id="join" class="btn btn-primary" data-disable-with="Unirse">
+        <a id="cancel" tabindex="1" class="btn-primary btn-lg">Cancelar</a>
+        <a id="join" class="btn-success btn-lg" data-disable-with="Unirse">
             Unirse
         </a>
     </div>
