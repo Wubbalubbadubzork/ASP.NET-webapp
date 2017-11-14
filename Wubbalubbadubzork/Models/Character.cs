@@ -27,12 +27,6 @@ namespace Wubbalubbadubzork.Models
         [Display(Name = "Armadura")]
         public int Armor { get; set; }
         [Required]
-        [Display(Name = "Daño")]
-        public int Damage { get; set; }
-        [Required]
-        [Display(Name = "Poder")]
-        public int Power { get; set; }
-        [Required]
         [Display(Name = "Jugable")]
         public bool Playable { get; set; }
         [Required]

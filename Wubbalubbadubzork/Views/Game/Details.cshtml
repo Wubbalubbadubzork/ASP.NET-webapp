@@ -2,11 +2,13 @@
 @{
     ViewBag.Title = "Details";
 }
+<span hidden id="username">@ViewBag.Name</span>
+<span hidden id="gameId">@ViewBag.GameId</span>
 
 <div class="container">
     <div class="row">
         <div class="col-sm12 col-md-6">
-            @*// Vista parcial Server / Load Scene*@
+            @Html.Partial("_Server")
         </div>
 
         <div class="col-sm12 col-md-6">
@@ -14,11 +16,17 @@
         </div>
 
         <div class="col-sm12 col-md-6">
-            @*// Vista parcial Options*@
+            @Html.Partial("_Options")
         </div>
 
         <div class="col-sm12 col-md-6">
-            @*// Vista parcial Chat*@
+            @Html.Partial("_Chat")
         </div>
     </div>
 </div>
+
+@section Scripts{
+    @Scripts.Render("~/Scripts/jquery.signalR-2.2.2.min.js")
+    @Scripts.Render("~/signalr/hubs")
+    @Scripts.Render("~/Content/Javascripts/GameHub.js")
+}

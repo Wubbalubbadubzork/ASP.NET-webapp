@@ -18,6 +18,9 @@ namespace Wubbalubbadubzork.Models
         [Display(Name = "Base Power")]
         public int Base_Power { get; set; }
         [Required]
+        [Display(Name = "Costo")]
+        public int Mana_Cost { get; set; }
+        [Required]
         [ForeignKey("Character")]
         public int Character_Id { get; set; }
         public virtual Character Character { get; set; }

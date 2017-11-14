@@ -52,6 +52,8 @@ namespace Wubbalubbadubzork.Controllers
             var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var user = manager.FindById(userId);
             ViewBag.Name = user.Name;
+            ViewBag.GameId = id;
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -70,6 +72,12 @@ namespace Wubbalubbadubzork.Controllers
                 u.Game = game;
                 db.Entry(u).State = EntityState.Modified;
                 db.SaveChanges();
+            }
+
+            var users_in_game = db.Users.Where(x=> x.Game_Id == id).ToList();
+            int i = 0;
+            foreach (var y in users_in_game)
+            {
             }
 
             return View(game);
@@ -147,6 +155,13 @@ namespace Wubbalubbadubzork.Controllers
             Game g = HelperMethods.Create(Guid.NewGuid());
 
             return RedirectToAction("CreateCustom", new { g.Id });
+        }
+
+        //GET: Game/Leaderboards
+        public ActionResult Leaderboards()
+        {
+            var users = db.Users.ToList();
+            return View(users);
         }
 
         [HttpPost]

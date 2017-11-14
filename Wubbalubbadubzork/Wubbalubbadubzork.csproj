@@ -255,6 +255,10 @@
     <Compile Include="Migrations\201711092326583_AddGameServerTablesAgain.Designer.cs">
       <DependentUpon>201711092326583_AddGameServerTablesAgain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711140047263_FixedOlveraStats.cs" />
+    <Compile Include="Migrations\201711140047263_FixedOlveraStats.Designer.cs">
+      <DependentUpon>201711140047263_FixedOlveraStats.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Character.cs" />
@@ -278,11 +282,10 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\CSS\center-screen.css" />
-    <Content Include="Content\CSS\dick.css" />
+    <Content Include="Content\CSS\dice.css" />
     <Content Include="Content\CSS\inf-loading.css" />
     <Content Include="Content\CSS\main.css" />
     <Content Include="Content\Javascripts\CreateHub.js" />
-    <Content Include="Content\Javascripts\Dice.js" />
     <Content Include="Content\Javascripts\GameHub.js" />
     <Content Include="Content\Javascripts\QueueHub.js" />
     <Content Include="Content\pictures\logo.jpg" />
@@ -360,6 +363,9 @@
     <Content Include="Views\Game\_JoinGameDialog.cshtml" />
     <Content Include="Views\Game\CreateCustom.cshtml" />
     <Content Include="Views\Game\_Dice.cshtml" />
+    <Content Include="Views\Game\_Chat.cshtml" />
+    <Content Include="Views\Game\_Options.cshtml" />
+    <Content Include="Views\Game\_Server.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -399,6 +405,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711092326583_AddGameServerTablesAgain.resx">
       <DependentUpon>201711092326583_AddGameServerTablesAgain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711140047263_FixedOlveraStats.resx">
+      <DependentUpon>201711140047263_FixedOlveraStats.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
