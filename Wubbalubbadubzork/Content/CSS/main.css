@@ -1,0 +1,9 @@
+body {
+    background-color: #E9EBEE;
+}
+
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 14px !important;
+    }
+}

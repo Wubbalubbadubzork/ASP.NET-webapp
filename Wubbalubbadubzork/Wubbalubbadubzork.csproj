@@ -289,6 +289,9 @@
     <Content Include="Content\Javascripts\GameHub.js" />
     <Content Include="Content\Javascripts\QueueHub.js" />
     <Content Include="Content\pictures\logo.jpg" />
+    <Content Include="Content\pictures\something.png" />
+    <Content Include="Content\pictures\steam.jpg" />
+    <Content Include="Content\pictures\undertale.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
