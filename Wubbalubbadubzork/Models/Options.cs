@@ -18,9 +18,6 @@ namespace Wubbalubbadubzork.Models
         [Display(Name = "Numero")]
         public int Number { get; set; }
         [Required]
-        [Display(Name = "ID de Escena siguiente")]
-        public int Next_scene_id { get; set; }
-        [Required]
         [ForeignKey("Scene")]
         public int Scene_id { get; set; }
         public virtual Scene Scene { get; set; }

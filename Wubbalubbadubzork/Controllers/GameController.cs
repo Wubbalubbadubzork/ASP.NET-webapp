@@ -52,6 +52,7 @@ namespace Wubbalubbadubzork.Controllers
             var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var user = manager.FindById(userId);
             ViewBag.Name = user.Name;
+            ViewBag.UserId = user.Id;
             ViewBag.GameId = id;
 
             if (id == null)
@@ -74,11 +75,17 @@ namespace Wubbalubbadubzork.Controllers
                 db.SaveChanges();
             }
 
-            var users_in_game = db.Users.Where(x=> x.Game_Id == id).ToList();
+            var playable_characters = db.Characters.Where(x => x.Playable == true).OrderBy(x => x.Id).ToList();
+            var users_in_game = db.Users.Where(x => x.Game_Id == id).ToList();
             int i = 0;
             foreach (var y in users_in_game)
             {
+                y.Character_Id = playable_characters[i].Id;
+                y.Character = playable_characters[i];
+                db.Entry(y).State = EntityState.Modified;
+                i++;
             }
+            db.SaveChanges();
 
             return View(game);
         } 
@@ -160,7 +167,12 @@ namespace Wubbalubbadubzork.Controllers
         //GET: Game/Leaderboards
         public ActionResult Leaderboards()
         {
-            var users = db.Users.ToList();
+            var userId = User.Identity.GetUserId();
+            var manager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var user = manager.FindById(userId);
+            ViewBag.Name = user.Name;
+
+            var users = db.Users.OrderBy(u => u.Score).ToList();
             return View(users);
         }
 

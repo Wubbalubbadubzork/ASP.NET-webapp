@@ -259,6 +259,14 @@
     <Compile Include="Migrations\201711140047263_FixedOlveraStats.Designer.cs">
       <DependentUpon>201711140047263_FixedOlveraStats.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711140715123_AddedForeignKeyCharacters.cs" />
+    <Compile Include="Migrations\201711140715123_AddedForeignKeyCharacters.Designer.cs">
+      <DependentUpon>201711140715123_AddedForeignKeyCharacters.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711140736116_EliminatedNextSceneIdOptions.cs" />
+    <Compile Include="Migrations\201711140736116_EliminatedNextSceneIdOptions.Designer.cs">
+      <DependentUpon>201711140736116_EliminatedNextSceneIdOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Character.cs" />
@@ -369,6 +377,7 @@
     <Content Include="Views\Game\_Chat.cshtml" />
     <Content Include="Views\Game\_Options.cshtml" />
     <Content Include="Views\Game\_Server.cshtml" />
+    <Content Include="Views\Game\Leaderboards.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -411,6 +420,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711140047263_FixedOlveraStats.resx">
       <DependentUpon>201711140047263_FixedOlveraStats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711140715123_AddedForeignKeyCharacters.resx">
+      <DependentUpon>201711140715123_AddedForeignKeyCharacters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711140736116_EliminatedNextSceneIdOptions.resx">
+      <DependentUpon>201711140736116_EliminatedNextSceneIdOptions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

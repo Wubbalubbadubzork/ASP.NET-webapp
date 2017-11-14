@@ -38,5 +38,8 @@ namespace Wubbalubbadubzork.Models
         [Required]
         [Display(Name = "Turn")]
         public bool Is_Turn { get; set; }
+        [ForeignKey("Scene")]
+        public int? Scene_Id { get; set; }
+        public virtual Scene Scene { get; set; }
     }
 }

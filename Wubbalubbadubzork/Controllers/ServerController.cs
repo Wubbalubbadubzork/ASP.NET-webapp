@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Wubbalubbadubzork.Models;
 
 namespace Wubbalubbadubzork.Controllers
 {
     public class ServerController : Controller
     {
-        // GET: Server
-        public ActionResult Index()
+        ApplicationDbContext db = new ApplicationDbContext();
+
+        [HttpPost]
+        public ActionResult LoadScene(int scene_id)
         {
-            return View();
+            Scene scene = db.Scenes.Find(scene_id);
+            return Content(scene.Description);
         }
     }
 }

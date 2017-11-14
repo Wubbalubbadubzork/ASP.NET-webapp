@@ -15,9 +15,29 @@
     gameHub.client.rollDice = function (number) {
         $('#dice').html(number);
     }
+    gameHub.client.printScene = function (username, message) {
+        $('#mainServer').append('<li>' + username + ': ' + message + '</li>');
+    }
+    gameHub.client.nextScene = function () {
+        $('#sceneId').html('' + parseInt($('#sceneId').html(), 10) + 1);
+        $.post("/Server/LoadScene", {
+            scene_id: $("#sceneId").html().trim()
+        }).done(function (response) {
+            gameHub.server.sceneDisplay(response, $("#gameId").html().trim());
+        })
+    }
 
     $.connection.hub.start().done(function () {
         console.log('Now connected');
+        gameHub.server.establishCharacters($("#gameId").html().trim());
+        gameHub.server.joinGame($("#gameId").html().trim(), $("#userId").html().trim());
+
+        $.post("/Server/LoadScene", {
+            scene_id: $("#sceneId").html().trim()
+        }).done(function (response) {
+            gameHub.server.sceneDisplay(response, $("#gameId").html().trim());
+        })
+
         $("#send").click(function () {
             if ($("#message").val() != '') {
                 gameHub.server.sendMessage($('#username').html().trim(), $("#message").val(), $("#gameId").html().trim());
