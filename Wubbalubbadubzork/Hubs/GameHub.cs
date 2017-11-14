@@ -73,11 +73,14 @@ namespace Wubbalubbadubzork.Hubs
 
         public void Turn(string gameId, int characterId)
         {
-            var character = db.Characters.Find(characterId);
+            var character = Characters[gameId][characterId];
+            var connectionId = User_Characters[gameId][character];
             if (character.Playable == true)
             {
                 Clients.Group(gameId).printScene("Narrador ", "Es turno de: " + character.Name);
-                Clients.Group(gameId).playerTurn();
+                Clients.Client(connectionId).announceTurn();
+                Clients.Client(connectionId).playerTurn();
+
             }
             else
             {
@@ -267,8 +270,8 @@ namespace Wubbalubbadubzork.Hubs
             {
                 var character = Characters[gameId][characterId];
                 var connectionId = User_Characters[gameId][character];
-                Clients.Client(connectionId).announceTurn();
             }
+            Clients.Group(gameId).whoIsNext();
         }
 
         public void EstablishCharacters(string gameId)

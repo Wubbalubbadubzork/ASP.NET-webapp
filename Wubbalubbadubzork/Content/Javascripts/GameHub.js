@@ -88,12 +88,13 @@
     gameHub.client.isTurn = function (id, playable) {
         $("#characterTurnId").html(id);
         $("#playableOrNot").html(playable);
+        gameHub.server.turn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10));
     }
 
     gameHub.client.announceTurn = function () {
         alert("It is your turn boy. Please roll the dice.");
         $("#button_dice").prop('disabled', false);
-        for (var i = 1; i <= 7; i++) {
+        for (var i = 1; i <= 9; i++) {
             if (i <= 4) {
                 $("#option" + i).prop('disabled', true);
                 $("#skill" + i).prop('disabled', true);
@@ -122,7 +123,6 @@
         });
 
         gameHub.server.whoseTurn($("#gameId").html().trim());
-        gameHub.server.turn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(),10));
 
         $("#send").click(function () {
             if ($("#message").val() != '') {
