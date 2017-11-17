@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Wubbalubbadubzork.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Leaderboards";
+}
+
+<div class="container">
+    <h3>Leaderboard</h3>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Puntaje</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                    var i = 1;
+                    foreach (var x in Model)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@x.Name</td>
+                            <td>@x.Score</td>
+                        </tr>
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

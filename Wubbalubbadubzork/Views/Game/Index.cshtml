@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container text-center">
+    <h4><a href="~/Game/Queue" class="btn-success btn-lg">Juega ahora!</a></h4>
+    <img width="50%" class="img-responsive center-block img-rounded" src="~/Content/pictures/logo.jpg" alt="wubba lubba dub zork">
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            @Html.ActionLink("Crear", "CreateGame", "Game", null, new { @class = "btn-primary btn-lg" })
+            <a id="joinGame" class="btn-success btn-lg">Unirse</a>
+        </div>
+    </div>
+</div>
+
+@section Dialogs{
+    
+    @Html.Partial("_JoinGameDialog")
+
+}
+
+@section Scripts{
+    
+    <script>
+        $(document).ready(function () {
+        console.log("Dialog javascript works!!");
+        var joinGameDialog = document.querySelector("#joinGameDialog");
+
+        if (!joinGameDialog.showModal) {
+            dialogPolyfill.registerDialog(piecesDialog);
+        }
+
+        setTimeout(function () {
+            $("#joinGame").click(function () {
+                joinGameDialog.showModal();
+                $("#join").unbind("click");
+                $("#gameId").val("");
+                $("#join").click(function () {
+                    $.post('/Game/JoinGame', {
+                        game_id: $("#gameId").val()
+                    }).done(function (response) {
+                        console.log('%c' + response, 'background: #222; color: #bada55');
+                        if (response == "Successful") {
+                            closeDialog();
+                            window.location= "/Game/CreateCustom/" + $("#gameId").val();
+                        }
+                        else {
+                            alert(response);
+                            closeDialog();
+                        }
+                    });
+                });
+            });
+        });
+
+        var closeDialog = function () {
+            joinGameDialog.close();
+        }
+
+        $("#cancel").click(function () {
+            closeDialog();
+        });
+    });
+
+    </script>
+    
+}
