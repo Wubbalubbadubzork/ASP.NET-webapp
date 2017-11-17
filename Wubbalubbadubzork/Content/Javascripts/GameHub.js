@@ -20,15 +20,24 @@
 
     gameHub.client.setSkills = function (id, i, name, targetid, type) {
         for (var j = i; j < 5; j++) {
-            $("#skill" + i).html("Skill" + i);
-            $("#skill" + i).prop('disabled', true);
-            $("#skill" + i).click(null);
+            $("#skill" + j).html("Skill" + j);
+            $("#skill" + j).prop('disabled', true);
+            $("#skill" + j).click(null);
         }
         $("#skill" + i).html(name);
         $("#skill" + i).prop('disabled', false);
         $("#skill" + i).click(function () {
             gameHub.server.executeSkill($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), parseInt($("#characterTurnId").html().trim(), 10), id, name, targetid, type, parseInt($("#dice").html().trim(), 10));
+            for (var j = 0; j < 5; j++) {
+                $("#skill" + j).html("Skill" + j);
+                $("#skill" + j).prop('disabled', true);
+                $("#skill" + j).click(null);
+            }
         })
+    }
+
+    gameHub.client.enemySkill = function (characterId, id, name, targetId, type, diceNumber) {
+        gameHub.server.executeSkill($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), characterId, id, name, targetid, type, diceNumber);
     }
 
     gameHub.client.setOption = function (i, name, tag) {
@@ -36,27 +45,52 @@
         $("#option" + i).prop('disabled', false);
         if (name == "Si mismo") {
             $("#option" + i).click(function () {
+                for (var j = 1; j <= 9; j++) {
+                    $("#option" + j).prop('disabled', true);
+                    $("#option" + j).html('Option'+j)
+                }
+                $('#mainServer').append('<li>Narrador: Selecionaste a ' + name + '</li>');
                 gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name,'selfOption');
             })
         }
         else if (name == "Todos enemigos") {
             $("#option" + i).click(function () {
+                for (var j = 1; j <= 9; j++) {
+                    $("#option" + j).prop('disabled', true);
+                    $("#option" + j).html('Option' + j)
+                }
+                $('#mainServer').append('<li>Narrador: Selecionaste a ' + name + '</li>');
                 gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name,'enemiesOption');
             })
         }
         else if (name == "Todos aliados") {
             $("#option" + i).click(function () {
+                for (var j = 1; j <= 9; j++) {
+                    $("#option" + j).prop('disabled', true);
+                    $("#option" + j).html('Option' + j)
+                }
+                $('#mainServer').append('<li>Narrador: Selecionaste a ' + name + '</li>');
                 gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name,'alliesOption');
             })
         }
         else {
             if (name == "Darius" || name == "Veigar" || name == "Ashe") {
                 $("#option" + i).click(function () {
+                    for (var j = 1; j <= 9; j++) {
+                        $("#option" + j).prop('disabled', true);
+                        $("#option" + j).html('Option' + j)
+                    }
+                    $('#mainServer').append('<li>Narrador: Selecionaste a ' + name + '</li>');
                     gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name, tag + "ally");
                 })
             }
             else {
                 $("#option" + i).click(function () {
+                    for (var j = 1; j <= 9; j++) {
+                        $("#option" + j).prop('disabled', true);
+                        $("#option" + j).html('Option' + j)
+                    }
+                    $('#mainServer').append('<li>Narrador: Selecionaste a ' + name + '</li>');
                     gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name, tag);
                 })
             }
@@ -64,7 +98,7 @@
     }
 
     gameHub.client.whoIsNext = function () {
-        gameHub.server.NextTurn($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), parseInt($("#characterTurnId").html().trim(), 10), $("#lastConnection").html().trim());
+        gameHub.server.nextTurn($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), parseInt($("#characterTurnId").html().trim(), 10), $("#lastConnection").html().trim());
     }
 
     gameHub.client.printScene = function (username, message) {
@@ -114,12 +148,8 @@
         }
     }
 
-    gameHub.client.playerTurn = function () {
-        gameHub.server.playerTurn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10));
-    }
-
-    gameHub.client.enemyTurn = function () {
-        gameHub.server.enemyTurn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10));
+    gameHub.client.enemyTurn = function (turnConnection) {
+        gameHub.server.enemy(turnConnection, $("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10));
     }
 
     gameHub.client.setLastConnection = function (connectionId) {

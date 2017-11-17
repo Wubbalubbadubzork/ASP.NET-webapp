@@ -70,7 +70,6 @@ namespace Wubbalubbadubzork.Hubs
                 int random = rnd.Next(0, keys.Count);
                 var id = keys[random];
                 var character = Characters[gameId][id];
-                var connection = User_Characters[gameId][character];
 
                 if (Characters[gameId][id].Health > 0)
                 {
@@ -86,8 +85,15 @@ namespace Wubbalubbadubzork.Hubs
                         Characters[gameId][id].Is_Turn = true;
                     }
                 }
-
-                Clients.Group(gameId).isTurn(connection, Characters[gameId][id].Id, Characters[gameId][id].Playable);
+                if(character.Playable == true)
+                {
+                    var connection = User_Characters[gameId][character];
+                    Clients.Group(gameId).isTurn(connection, Characters[gameId][id].Id, Characters[gameId][id].Playable);
+                }
+                else
+                {
+                    Clients.Group(gameId).isTurn("", Characters[gameId][id].Id, Characters[gameId][id].Playable);
+                }
             }
             
         }
@@ -102,20 +108,47 @@ namespace Wubbalubbadubzork.Hubs
                 {
                     Clients.Group(gameId).printScene("Narrador ", "Es turno de: " + character.Name);
                     Clients.Client(connectionId).announceTurn();
-                    //Clients.Client(connectionId).playerTurn();
 
                 }
                 else
                 {
                     Clients.Group(gameId).printScene("Narrador ", "Es turno de: " + character.Name);
-                    Clients.Group(gameId).enemyTurn();
+                    Clients.Group(gameId).enemyTurn(turnConnection);
                 }
             }
          }
 
-        public void EnemyTurn(string gameId)
+        public void Enemy(string turnConnection, string gameId, int characterId)
         {
-            Clients.Group(gameId).printScene("Narrador ", "Not implemented yet.");
+            if(turnConnection == Context.ConnectionId)
+            {
+                if(Characters[gameId][characterId].Health > 0)
+                {
+                    var skills = db.Skills.Where(s => s.Character_Id == characterId).ToList();
+                    Random rnd = new Random();
+                    int randomSkillIndex = rnd.Next(0, skills.Count);
+                    Skill randomSkill = skills[randomSkillIndex];
+                    int targetId;
+                    string type;
+                    if (randomSkill.Name == "Curacion")
+                    {
+                        targetId = Characters[gameId][characterId].Id;
+                        type = "cure";
+                    }
+                    else
+                    {
+                        Random rnd2 = new Random();
+                        var players = User_Characters[gameId].Keys.ToList();
+                        int randomPlayerIndex = rnd2.Next(0, players.Count);
+                        Character randomCharacter = players[randomPlayerIndex];
+                        targetId = randomCharacter.Id;
+                        type = "damage";
+                    }
+                    Random rnd3 = new Random();
+                    var diceNumber = rnd3.Next(1, 7);
+                    Clients.Group(gameId).enemySkill(characterId, randomSkill.Id, randomSkill.Name, targetId, type, diceNumber);
+                }
+            }
             Clients.Group(gameId).whoIsNext();
         }
 
