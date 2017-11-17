@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using Wubbalubbadubzork.Models;
+using System.Data.Entity;
 
 namespace Wubbalubbadubzork.Hubs
 {
@@ -15,7 +16,7 @@ namespace Wubbalubbadubzork.Hubs
 
         public static Dictionary<string, Dictionary<Character, string>> User_Characters = new Dictionary<string, Dictionary<Character, string>>();
 
-        public void JoinGame(string gameId, string user_id)
+        public void JoinGame(string gameId)
         {
             string connectionId = Context.ConnectionId;
             Groups.Add(connectionId, gameId);
@@ -38,62 +39,124 @@ namespace Wubbalubbadubzork.Hubs
             }
         }
 
-        public void WhoseTurn(string gameId)
+        public void SetLast(string gameId)
         {
-            var keys = Characters[gameId].Keys;
-            foreach(var i in keys)
+            Clients.Group(gameId).setLastConnection(Context.ConnectionId);
+        }
+
+        public void WhoseTurn(string connectionId, string gameId)
+        {
+            if (connectionId == Context.ConnectionId)
             {
-                if(Characters[gameId][i].Is_Turn == true)
+                var keys = Characters[gameId].Keys;
+                foreach (var i in keys)
                 {
-                    Clients.Group(gameId).isTurn(Characters[gameId][i].Id, Characters[gameId][i].Playable);
-                    break;
+                    if (Characters[gameId][i].Is_Turn == true)
+                    {
+                        var connection = User_Characters[gameId][Characters[gameId][i]];
+                        Clients.Group(gameId).isTurn(connection, Characters[gameId][i].Id, Characters[gameId][i].Playable);
+                        break;
+                    }
                 }
             }
         }
 
-        public void NextTurn(string gameId, int scene_id, int currentTurn)
+        public void NextTurn(string gameId, int scene_id, int currentTurn, string connectionId)
         {
-            var keys = Characters[gameId].Keys.ToList();
-            Random rnd = new Random();
-            int random = rnd.Next(0, keys.Count);
-            var id = keys[random];
-
-            if(Characters[gameId][id].Health > 0)
+            if (connectionId == Context.ConnectionId)
             {
-                if(Characters[gameId][id].Scene_Id == scene_id)
+                var keys = Characters[gameId].Keys.ToList();
+                Random rnd = new Random();
+                int random = rnd.Next(0, keys.Count);
+                var id = keys[random];
+                var character = Characters[gameId][id];
+                var connection = User_Characters[gameId][character];
+
+                if (Characters[gameId][id].Health > 0)
                 {
-                    Characters[gameId][currentTurn].Is_Turn = false;
-                    Characters[gameId][id].Is_Turn = true;
+                    if(Characters[gameId][id].Playable == true)
+                    {
+                        Characters[gameId][currentTurn].Is_Turn = false;
+                        Characters[gameId][id].Is_Turn = true;
+                    }
+
+                    else if (Characters[gameId][id].Scene_Id == scene_id)
+                    {
+                        Characters[gameId][currentTurn].Is_Turn = false;
+                        Characters[gameId][id].Is_Turn = true;
+                    }
+                }
+
+                Clients.Group(gameId).isTurn(connection, Characters[gameId][id].Id, Characters[gameId][id].Playable);
+            }
+            
+        }
+
+        public void Turn(string gameId, int characterId, string turnConnection)
+        {
+            if(turnConnection == Context.ConnectionId)
+            {
+                var character = Characters[gameId][characterId];
+                var connectionId = User_Characters[gameId][character];
+                if (character.Playable == true)
+                {
+                    Clients.Group(gameId).printScene("Narrador ", "Es turno de: " + character.Name);
+                    Clients.Client(connectionId).announceTurn();
+                    //Clients.Client(connectionId).playerTurn();
+
+                }
+                else
+                {
+                    Clients.Group(gameId).printScene("Narrador ", "Es turno de: " + character.Name);
+                    Clients.Group(gameId).enemyTurn();
                 }
             }
-
-            Clients.Group(gameId).isTurn(Characters[gameId][id].Id, Characters[gameId][id].Playable);
-            Clients.Group(gameId).runTurn();
-        }
-
-        public void Turn(string gameId, int characterId)
-        {
-            var character = Characters[gameId][characterId];
-            var connectionId = User_Characters[gameId][character];
-            if (character.Playable == true)
-            {
-                Clients.Group(gameId).printScene("Narrador ", "Es turno de: " + character.Name);
-                Clients.Client(connectionId).announceTurn();
-                Clients.Client(connectionId).playerTurn();
-
-            }
-            else
-            {
-                Clients.Group(gameId).printScene("Narrador ", "Es turno de: " + character.Name);
-                Clients.Group(gameId).enemyTurn();
-            }
-
-        }
+         }
 
         public void EnemyTurn(string gameId)
         {
             Clients.Group(gameId).printScene("Narrador ", "Not implemented yet.");
             Clients.Group(gameId).whoIsNext();
+        }
+
+        public void EnemiesLeft(string connectionId, string gameId, int sceneId)
+        {
+            if(connectionId == Context.ConnectionId)
+            {
+                var n_enemies = 0;
+                var enemies_in_scene = db.Characters.Where(u => u.Scene_Id == sceneId).ToList();
+                foreach (var j in enemies_in_scene)
+                {
+                    if (Characters[gameId][j.Id].Health > 0)
+                    {
+                        n_enemies++;
+                    }
+                }
+
+                if(n_enemies > 0)
+                {
+                    Clients.Group(gameId).whoIsNext();
+                }
+                else
+                {
+                    if(sceneId < 5)
+                    {
+                        Clients.Group(gameId).nextScene();
+                    }
+                    else
+                    {
+                        Clients.Group(gameId).finishGame();
+                        var users = db.Users.Where(u => u.Game_Id.ToString() == gameId).ToList();
+                        foreach(var u in users)
+                        {
+                            u.Score += 100;
+                            db.Entry(u).State = EntityState.Modified;
+                        }
+                        db.SaveChanges();
+                        Clients.Group(gameId).redirectIndex();
+                    }
+                }
+            }
         }
 
         public void ExecuteSkill(string gameId, int scene_id, int characterId, int skillId, string skillName, string targetId, string type, int dice)
@@ -108,8 +171,6 @@ namespace Wubbalubbadubzork.Hubs
             else if(targetId == "enemiesOption")
             {
                 var enemies_in_scene = db.Characters.Where(u => u.Scene_Id == scene_id).ToList();
-                target = new List<Character>();
-                var i = 1;
                 foreach (var j in enemies_in_scene)
                 {
                     if (Characters[gameId][j.Id].Health > 0)
@@ -120,7 +181,7 @@ namespace Wubbalubbadubzork.Hubs
             }
             else if(targetId == "alliesOption")
             {
-                 target = Characters[gameId].Values.Where(u => u.Playable == true).ToList();
+                 target = Characters[gameId].Values.Where(u => u.Playable == true && u.Health > 0).ToList();
             }
             else if (targetId.EndsWith("ally"))
             {
@@ -136,7 +197,7 @@ namespace Wubbalubbadubzork.Hubs
                 foreach(var j in target)
                 {
                     j.Health = j.Health - db.Skills.Find(skillId).Base_Power + dice;
-                    Clients.Group(gameId).printScene("Narrador ", j.Name + " perdio " + db.Skills.Find(skillId).Base_Power + dice + " puntos de vida, ahora tiene: " + j.Health);
+                    Clients.Group(gameId).printScene("Narrador ", j.Name + " perdio " + (db.Skills.Find(skillId).Base_Power + dice) + " puntos de vida, ahora tiene: " + j.Health);
                 }
             }
             else
@@ -144,11 +205,11 @@ namespace Wubbalubbadubzork.Hubs
                 foreach (var j in target)
                 {
                     j.Health = j.Health + db.Skills.Find(skillId).Base_Power + dice;
-                    Clients.Group(gameId).printScene("Narrador ", j.Name + " gano " + db.Skills.Find(skillId).Base_Power + dice + " puntos de vida, ahora tiene: " + j.Health);
+                    Clients.Group(gameId).printScene("Narrador ", j.Name + " gano " + (db.Skills.Find(skillId).Base_Power + dice) + " puntos de vida, ahora tiene: " + j.Health);
                 }
             }
 
-            Clients.Group(gameId).whoIsNext();
+            Clients.Group(gameId).checkScene(connectionId);
         }
 
         public void EstablishSkills(string gameId, int characterId, string name, string targetId)
@@ -164,8 +225,6 @@ namespace Wubbalubbadubzork.Hubs
                 }
                 else
                 {
-                    var id = Int32.Parse(targetId);
-                    var target = Characters[gameId][id];
                     for(int i = 1; i <= 2; i++)
                     {
                         Clients.Client(connectionId).setSkills(i, i, db.Skills.Find(i).Name, targetId, "damage");
@@ -221,46 +280,49 @@ namespace Wubbalubbadubzork.Hubs
             }
         }
 
-        public void EstablishOptions(string gameId, int characterId, int scene_id)
+        public void EstablishOptions(string connection, string gameId, int characterId, int scene_id)
         {
-            var character = Characters[gameId][characterId];
-            var connectionId = User_Characters[gameId][character];
-            var enemies_in_scene = db.Characters.Where(u => u.Scene_Id == scene_id).ToList();
-            var i = 1;
-            foreach (var j in enemies_in_scene)
+            if(connection == Context.ConnectionId)
             {
-                if (Characters[gameId][j.Id].Health > 0)
+                var character = Characters[gameId][characterId];
+                var connectionId = User_Characters[gameId][character];
+                var enemies_in_scene = db.Characters.Where(u => u.Scene_Id == scene_id).ToList();
+                var i = 1;
+                foreach (var j in enemies_in_scene)
                 {
-                    Clients.Client(connectionId).setOption(i, j.Name, j.Id);
-                    i++;
+                    if (Characters[gameId][j.Id].Health > 0)
+                    {
+                        Clients.Client(connectionId).setOption(i, j.Name, j.Id);
+                        i++;
+                    }
                 }
-            }
-            if (character.Name == "Darius")
-            {
-                Clients.Client(connectionId).setOption(i, "Si mismo", "Si mismo");
-            }
-            else if (character.Name == "Veigar")
-            {
-                Clients.Client(connectionId).setOption(i, "Todos enemigos", "Todos enemigos");
-            }
-            else if (character.Name == "Ashe")
-            {
-                Clients.Client(connectionId).setOption(i, "Todos enemigos", "Todos enemigos");
-                i++;
-                Clients.Client(connectionId).setOption(i, "Todos aliados", "Todos aliados");
-            }
-            else if (character.Name == "Torin")
-            {
-                Clients.Client(connectionId).setOption(i, "Todos enemigos", "Todos enemigos");
-                i++;
-                Clients.Client(connectionId).setOption(i, "Darius", db.Characters.Where(u=>u.Name == "Darius").FirstOrDefault().Id);
-                i++;
-                Clients.Client(connectionId).setOption(i, "Veigar", db.Characters.Where(u => u.Name == "Veigar").FirstOrDefault().Id);
-                i++;
-                Clients.Client(connectionId).setOption(i, "Ashe", db.Characters.Where(u => u.Name == "Ashe").FirstOrDefault().Id);
-                i++;
-                Clients.Client(connectionId).setOption(i, "Si mismo", "Si mismo");
+                if (character.Name == "Darius")
+                {
+                    Clients.Client(connectionId).setOption(i, "Si mismo", "Si mismo");
+                }
+                else if (character.Name == "Veigar")
+                {
+                    Clients.Client(connectionId).setOption(i, "Todos enemigos", "Todos enemigos");
+                }
+                else if (character.Name == "Ashe")
+                {
+                    Clients.Client(connectionId).setOption(i, "Todos enemigos", "Todos enemigos");
+                    i++;
+                    Clients.Client(connectionId).setOption(i, "Todos aliados", "Todos aliados");
+                }
+                else if (character.Name == "Torin")
+                {
+                    Clients.Client(connectionId).setOption(i, "Todos enemigos", "Todos enemigos");
+                    i++;
+                    Clients.Client(connectionId).setOption(i, "Darius", db.Characters.Where(u => u.Name == "Darius").FirstOrDefault().Id);
+                    i++;
+                    Clients.Client(connectionId).setOption(i, "Veigar", db.Characters.Where(u => u.Name == "Veigar").FirstOrDefault().Id);
+                    i++;
+                    Clients.Client(connectionId).setOption(i, "Ashe", db.Characters.Where(u => u.Name == "Ashe").FirstOrDefault().Id);
+                    i++;
+                    Clients.Client(connectionId).setOption(i, "Si mismo", "Si mismo");
 
+                }
             }
         }
 
@@ -312,9 +374,14 @@ namespace Wubbalubbadubzork.Hubs
             }
         }
 
-        public void SceneDisplay(string description, string gameId)
+        public void SceneDisplay(string connectionId, int sceneId, string gameId)
         {
-            Clients.Group(gameId).printScene("Narrador", description);
+            if(connectionId == Context.ConnectionId)
+            {
+                var description = db.Scenes.Find(sceneId).Description;
+
+                Clients.Group(gameId).printScene("Narrador", description);
+            }
         }
 
         public void SendMessage(string username, string message, string gameId)

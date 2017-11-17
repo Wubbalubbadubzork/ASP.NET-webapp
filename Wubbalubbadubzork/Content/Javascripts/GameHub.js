@@ -15,80 +15,92 @@
     gameHub.client.rollDice = function (number) {
         $('#dice').html(number);
         $('#button_dice').prop('disabled', true);
-        gameHub.server.establishOptions($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), parseInt($("#sceneId").html().trim(), 10));
+        gameHub.server.establishOptions($("#characterTurnConnection").html().trim(), $("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), parseInt($("#sceneId").html().trim(), 10));
     }
 
     gameHub.client.setSkills = function (id, i, name, targetid, type) {
-        for (var j = 1; j < i; j++) {
-            $("#skill" + i).html(name);
-            $("#skill" + i).prop('disabled', false);
-            $("#skill" + i).click(function () {
-                gameHub.server.executeSkill($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), parseInt($("#characterTurnId").html().trim(), 10), id, name, targetid, type, parseInt($("#dice").html().trim()));
-            })
+        for (var j = i; j < 5; j++) {
+            $("#skill" + i).html("Skill" + i);
+            $("#skill" + i).prop('disabled', true);
+            $("#skill" + i).click(null);
         }
+        $("#skill" + i).html(name);
+        $("#skill" + i).prop('disabled', false);
+        $("#skill" + i).click(function () {
+            gameHub.server.executeSkill($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), parseInt($("#characterTurnId").html().trim(), 10), id, name, targetid, type, parseInt($("#dice").html().trim(), 10));
+        })
     }
 
     gameHub.client.setOption = function (i, name, tag) {
         $("#option" + i).html(name);
+        $("#option" + i).prop('disabled', false);
         if (name == "Si mismo") {
-            $("#option" + i).addClass('selfOption');
             $("#option" + i).click(function () {
                 gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name,'selfOption');
             })
         }
         else if (name == "Todos enemigos") {
-            $("#option" + i).addClass('enemiesOption');
             $("#option" + i).click(function () {
                 gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name,'enemiesOption');
             })
         }
         else if (name == "Todos aliados") {
-            $("#option" + i).addClass('alliesOption');
             $("#option" + i).click(function () {
                 gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name,'alliesOption');
             })
         }
         else {
             if (name == "Darius" || name == "Veigar" || name == "Ashe") {
-                $("#option" + i).addClass(tag + "ally");
                 $("#option" + i).click(function () {
                     gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name, tag + "ally");
                 })
             }
             else {
-                $("#option" + i).addClass(tag);
                 $("#option" + i).click(function () {
                     gameHub.server.establishSkills($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), name, tag);
                 })
             }
-        }
-        $("#option" + i).prop('disabled', false);       
+        }       
     }
 
     gameHub.client.whoIsNext = function () {
-        gameHub.server.NextTurn($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), parseInt($("#characterTurnId").html().trim(), 10));
-    }
-
-    gameHub.client.runTurn = function () {
-        gameHub.server.Turn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10));
+        gameHub.server.NextTurn($("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10), parseInt($("#characterTurnId").html().trim(), 10), $("#lastConnection").html().trim());
     }
 
     gameHub.client.printScene = function (username, message) {
         $('#mainServer').append('<li>' + username + ': ' + message + '</li>');
     }
-    gameHub.client.nextScene = function () {
-        $('#sceneId').html('' + parseInt($('#sceneId').html(), 10) + 1);
-        $.post("/Server/LoadScene", {
-            scene_id: $("#sceneId").html().trim()
-        }).done(function (response) {
-            gameHub.server.sceneDisplay(response, $("#gameId").html().trim());
-        })
+
+    gameHub.client.finishGame = function () {
+        $('#mainServer').append('<li>Narrador: Felicidades!! Derrotaron a Jimmy y terminaron esta partida. Reciban 100 puntos a su cuenta. Adiós!</li>');
     }
 
-    gameHub.client.isTurn = function (id, playable) {
+    gameHub.client.redirectIndex = function () {
+        window.location = '/Home/Index';
+    }
+
+    gameHub.client.nextScene = function () {
+        var scene_id = parseInt($("#sceneId").html().trim(), 10);
+        scene_id++;
+        $('#sceneId').html(scene_id + '');
+        gameHub.server.sceneDisplay($("#lastConnection").html().trim(), parseInt($("#sceneId").html().trim(), 10), $("#gameId").html().trim());
+        gameHub.server.whoseTurn($("#lastConnection").html().trim(), $("#gameId").html().trim());
+    }
+
+    gameHub.client.checkScene = function (connectionId ) {
+        gameHub.server.enemiesLeft(connectionId, $("#gameId").html().trim(), parseInt($("#sceneId").html().trim(), 10));
+    }
+
+    gameHub.client.isTurn = function (connectionId, id, playable) {
         $("#characterTurnId").html(id);
         $("#playableOrNot").html(playable);
-        gameHub.server.turn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10));
+        if (playable == true) {
+            $("#characterTurnConnection").html(connectionId);
+        }
+        else {
+            $("#characterTurnConnection").html('');
+        }        
+        gameHub.server.turn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10), $("#characterTurnConnection").html().trim());
     }
 
     gameHub.client.announceTurn = function () {
@@ -100,7 +112,6 @@
                 $("#skill" + i).prop('disabled', true);
             }
         }
-        gameHub.server.sceneDisplay("Your turn. Please roll the dice", $("#gameId").html().trim());
     }
 
     gameHub.client.playerTurn = function () {
@@ -111,18 +122,20 @@
         gameHub.server.enemyTurn($("#gameId").html().trim(), parseInt($("#characterTurnId").html().trim(), 10));
     }
 
+    gameHub.client.setLastConnection = function (connectionId) {
+        $("#lastConnection").html(connectionId + "");
+    }
+
     $.connection.hub.start().done(function () {
         console.log('Now connected');
         gameHub.server.establishCharacters($("#gameId").html().trim());
-        gameHub.server.joinGame($("#gameId").html().trim(), $("#userId").html().trim());
+        gameHub.server.joinGame($("#gameId").html().trim());
+        gameHub.server.setLast($("#gameId").html().trim());
 
-        $.post("/Server/LoadScene", {
-            scene_id: $("#sceneId").html().trim()
-        }).done(function (response) {
-            gameHub.server.sceneDisplay(response, $("#gameId").html().trim());
-        });
-
-        gameHub.server.whoseTurn($("#gameId").html().trim());
+        setTimeout(function () {
+            gameHub.server.sceneDisplay($("#lastConnection").html().trim(), parseInt($("#sceneId").html().trim(), 10), $("#gameId").html().trim());
+            gameHub.server.whoseTurn($("#lastConnection").html().trim(), $("#gameId").html().trim());
+        }, 5000);
 
         $("#send").click(function () {
             if ($("#message").val() != '') {
